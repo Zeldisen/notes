@@ -1,0 +1,66 @@
+plugins:
+  - serverless-dotenv-plugin
+org: nettan
+
+service: notes
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  region: eu-north-1
+
+  environment:
+    TABLE_NAME: notes-db
+
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:PutItem
+        - dynamodb:GetItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+        - dynamodb:Query
+        - dynamodb:Scan
+      Resource:
+        - arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/${self:provider.environment.TABLE_NAME}
+        - arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/account
+
+functions:
+  signin:
+    handler: functions/signin/index.handler
+    events:
+      - httpApi:
+          path: '/auth/signin'
+          method: post
+
+  signup:
+    handler: functions/signup/index.handler
+    events:
+      - httpApi:
+          path: '/auth/signup'
+          method: post
+
+resources:
+  Resources:
+    notesDb:
+       Type: AWS::DynamoDB::Table
+       Properties:
+         TableName: notes-db
+         AttributeDefinitions:
+           - AttributeName: id
+             AttributeType: S
+         KeySchema:
+            - AttributeName: id
+              KeyType: HASH
+         BillingMode: PAY_PER_REQUEST
+    usersDb:
+       Type: AWS::DynamoDB::Table
+       Properties:
+         TableName: account
+         AttributeDefinitions:
+           - AttributeName: username
+             AttributeType: S
+         KeySchema:
+            - AttributeName: username
+              KeyType: HASH
+         BillingMode: PAY_PER_REQUEST 
