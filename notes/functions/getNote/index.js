@@ -18,8 +18,10 @@ const getHandler = async (event) => {
   const command = new QueryCommand({
     TableName: "notey-db",
     KeyConditionExpression: "userId = :u",
+    FilterExpression: "attribute_not_exists(deleted) OR deleted = :false",
     ExpressionAttributeValues: {
       ":u": event.userId,
+      ":false": false
     },
   });
 

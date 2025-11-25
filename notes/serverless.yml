@@ -61,6 +61,20 @@ functions:
           path: '/notes/{id}'
           method: patch
 
+  deleteNote:
+    handler: functions/deleteNote/index.handler
+    events:
+      - httpApi:
+          path: '/notes/{id}'
+          method: delete
+
+  restoreNote:
+    handler: functions/restoreNote/index.handler
+    events:
+      - httpApi:
+          path: '/notes/{id}/restore'
+          method: put
+
 resources:
   Resources:
     notesDb:
