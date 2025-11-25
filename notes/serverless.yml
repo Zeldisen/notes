@@ -54,6 +54,13 @@ functions:
           path: '/getNote'
           method: get
 
+  editNote:
+    handler: functions/editNote/index.handler
+    events:
+      - httpApi:
+          path: '/notes/{id}'
+          method: patch
+
 resources:
   Resources:
     notesDb:
