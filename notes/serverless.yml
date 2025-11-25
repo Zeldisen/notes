@@ -10,7 +10,7 @@ provider:
   region: eu-north-1
 
   environment:
-    TABLE_NAME: notes-db
+    TABLE_NAME: notey-db
 
   iamRoleStatements:
     - Effect: Allow
@@ -39,19 +39,37 @@ functions:
       - httpApi:
           path: '/auth/signup'
           method: post
+  
+  createNote:
+    handler: functions/createNote/index.handler
+    events:
+      - httpApi:
+          path: '/createNote'
+          method: post
+
+  getNote:
+    handler: functions/getNote/index.handler
+    events:
+      - httpApi:
+          path: '/getNote'
+          method: get
 
 resources:
   Resources:
     notesDb:
        Type: AWS::DynamoDB::Table
        Properties:
-         TableName: notes-db
+         TableName: notey-db
          AttributeDefinitions:
-           - AttributeName: id
+           - AttributeName: userId
+             AttributeType: S
+           - AttributeName: createdAt
              AttributeType: S
          KeySchema:
-            - AttributeName: id
-              KeyType: HASH
+           - AttributeName: userId
+             KeyType: HASH
+           - AttributeName: createdAt
+             KeyType: RANGE
          BillingMode: PAY_PER_REQUEST
     usersDb:
        Type: AWS::DynamoDB::Table
@@ -61,6 +79,6 @@ resources:
            - AttributeName: username
              AttributeType: S
          KeySchema:
-            - AttributeName: username
-              KeyType: HASH
-         BillingMode: PAY_PER_REQUEST 
+           - AttributeName: username
+             KeyType: HASH
+         BillingMode: PAY_PER_REQUEST

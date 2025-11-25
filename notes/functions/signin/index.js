@@ -42,8 +42,8 @@ async function signIn( username, password) {
 
    // jwt-token is now a secret.
     const token = jwt.sign(
-     { id: user.userId, username: user.username },
-       process.env.JWT_SECRET,
+     { userId: user.userId, username: user.username },
+       process.env.JWT_SECRET, 
      { expiresIn: 1800 });
 
     return {success: true, token: token}
