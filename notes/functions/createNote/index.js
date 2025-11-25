@@ -15,6 +15,12 @@ const createHandler = async (event) => {
   }
 
   const body = JSON.parse(event.body || "{}");
+   if (!body.title || typeof body.title !== "string" || body.title.trim().length === 0) {
+  return sendResponse(400, { success: false, message: "Title is required" });
+  }
+  if (!body.content || typeof body.content !== "string" || body.content.trim().length === 0) {
+  return sendResponse(400, { success: false, message: "Content is required" });
+  }
 
   const note = {
     userId: event.userId,
@@ -22,6 +28,7 @@ const createHandler = async (event) => {
     id: crypto.randomUUID(),
     title: body.title,
     content: body.content,
+    deleted: false
   };
 
  const command = new PutCommand({
