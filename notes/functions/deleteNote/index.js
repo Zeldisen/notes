@@ -57,7 +57,7 @@ const deleteHandler = async (event) => {
     },
     ExpressionAttributeValues: {
       ":true": true,
-      ":now": new Date().toISOString(),
+      ":now": new Date().toISOString(), // vilket datum som anteckning raderades
     },
     ReturnValues: "ALL_NEW",
   });
