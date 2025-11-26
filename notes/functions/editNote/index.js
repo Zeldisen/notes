@@ -8,7 +8,7 @@ const client = new DynamoDBClient({});
 const db = DynamoDBDocumentClient.from(client);
 
 const editHandler = async (event) => {
-    
+
     // kollar om användare är inloggad osv.
   if (!event.userId) {
     return sendResponse(401, { success: false, message: "Unauthorized" });
@@ -81,7 +81,7 @@ const editHandler = async (event) => {
 
   // Uppdaterar via userId + createdAt (pk i tabellen)
   const command = new UpdateCommand({
-    TableName: process.env.TABLE_NAME,
+    TableName: 'notey-db',
     Key: {
       userId: existing.userId,
       createdAt: existing.createdAt,
