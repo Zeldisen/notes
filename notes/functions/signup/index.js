@@ -1,12 +1,26 @@
 const {sendResponse} = require("../../responses/index");
 const bcrypt = require('bcryptjs');
 const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
-const { PutCommand, DynamoDBDocumentClient } = require('@aws-sdk/lib-dynamodb');
+const { GetCommand, PutCommand, DynamoDBDocumentClient } = require('@aws-sdk/lib-dynamodb');
 
 const client = new DynamoDBClient({});
 const db = DynamoDBDocumentClient.from(client);
 
+// kollar om användarnamn redan finns och skickar då ett error i signup funktionen
+async function userExists(username) {
+  const command = new GetCommand({
+    TableName: 'account',
+    Key: { username: username },
+  });
 
+  try {
+    const { Item } = await db.send(command);
+    return !!Item; // true om användaren finns
+  } catch (error) {
+    console.log("userExists error:", error);
+    return false;
+  }
+}
 async function createAccount(username, hashedPassword, userId, firstname, lastname) {
  console.log('createAccount input:', { username, hashedPassword, userId, firstname, lastname });
      const command = new PutCommand({
@@ -32,6 +46,9 @@ async function createAccount(username, hashedPassword, userId, firstname, lastna
 async function signup(username, password, firstname, lastname) {
     //check if userame already exist
     // if username exist return ( success: false, message: "username already exists")
+    if (await userExists(username)) {
+    return { success: false, message: "username already exists" };
+  }
 
     const hashedPassword = await bcrypt.hash(password, 15 );
     const { nanoid } = await import("nanoid");
