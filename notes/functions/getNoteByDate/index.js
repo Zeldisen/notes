@@ -43,7 +43,7 @@ const getByDateHandler = async (event) => {
 
   // Query på userId + createdAt BETWEEN ... dessa datum inkluderat de dagar man skrivit och de dagar som är emellan
   const command = new QueryCommand({
-    TableName: process.env.TABLE_NAME,
+    TableName: 'notey-db',
     KeyConditionExpression: "userId = :u AND createdAt BETWEEN :from AND :to",
     ExpressionAttributeValues: {
       ":u": event.userId,

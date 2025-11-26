@@ -81,6 +81,13 @@ functions:
           path: '/notes/{id}/restore'
           method: put
 
+  getDeletedNotes:
+    handler: functions/getDeletedNotes/index.handler
+    events:
+      - httpApi:
+          path: '/notes/deleted'
+          method: get
+
 resources:
   Resources:
     notesDb:
