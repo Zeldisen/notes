@@ -53,6 +53,12 @@ functions:
       - httpApi:
           path: '/getNote'
           method: get
+  getNoteByDate:
+    handler: functions/getNoteByDate/index.handler
+    events:
+      - httpApi:
+          path: '/notes/by-date'
+          method: get        
 
   editNote:
     handler: functions/editNote/index.handler
