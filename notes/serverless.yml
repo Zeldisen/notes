@@ -44,14 +44,14 @@ functions:
     handler: functions/createNote/index.handler
     events:
       - httpApi:
-          path: '/createNote'
+          path: '/notes'
           method: post
 
   getNote:
     handler: functions/getNote/index.handler
     events:
       - httpApi:
-          path: '/getNote'
+          path: '/notes'
           method: get
   getNoteByDate:
     handler: functions/getNoteByDate/index.handler
